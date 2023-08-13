@@ -13,6 +13,8 @@ const styles = {
     fontWeight: theme.fontWeight.md,
     cursor: "pointer",
     border: "none",
+    transition: "all ease 0.3s",
+
     ":disabled": {
       pointerEvents: "none",
       opacity: 0.5,
@@ -20,13 +22,22 @@ const styles = {
   }),
 };
 
-type ButtonVariant = "primary";
+type ButtonVariant = "primary" | "ghost";
 const buttonVariant: Record<ButtonVariant, SerializedStyles> = {
   primary: css({
     background: theme.colors.primary,
     color: theme.colors.white,
     ":hover": {
       opacity: 0.9,
+    },
+  }),
+  ghost: css({
+    background: "none",
+    ":hover": {
+      background: theme.colors.accent,
+    },
+    ":focus": {
+      background: "none",
     },
   }),
 };

@@ -1,8 +1,20 @@
+export const screens = {
+  sm: "640px",
+  lg: "1024px",
+};
+
+export const mediaQuery = {
+  sm: `@media (min-width: ${screens.sm})`,
+  lg: `@media (min-width: ${screens.lg})`,
+};
+
 const theme = {
   colors: {
     white: "#ffffff",
+    indigo: "#4f46e5",
 
     primary: "#020617",
+    accent: "#efefef",
   },
 
   border: {
