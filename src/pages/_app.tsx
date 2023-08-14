@@ -1,4 +1,5 @@
 import Layout from "@/components/layout";
+import { FavoriteContactsProvider } from "@/context/favorite-contacts-context";
 import client from "@/graphql/client";
 import { globalStyles } from "@/styles/global.styles";
 import { ApolloProvider } from "@apollo/client";
@@ -10,9 +11,11 @@ export default function App({ Component, pageProps }: AppProps) {
     <>
       <Global styles={globalStyles} />
       <ApolloProvider client={client}>
-        <Layout>
-          <Component {...pageProps} />
-        </Layout>
+        <FavoriteContactsProvider>
+          <Layout>
+            <Component {...pageProps} />
+          </Layout>
+        </FavoriteContactsProvider>
       </ApolloProvider>
     </>
   );

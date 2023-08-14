@@ -16,7 +16,7 @@ interface AvatarProps {
   size?: number;
 }
 
-export default function Avatar({ name, size = 32 }: AvatarProps) {
+export default function Avatar({ name, size = 40 }: AvatarProps) {
   return (
     <div css={style}>
       <Image

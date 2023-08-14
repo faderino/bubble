@@ -1,16 +1,50 @@
+import { useFavoriteContacts } from "@/context/favorite-contacts-context";
+import { GET_CONTACT_LIST } from "@/graphql/queries";
 import theme from "@/styles/theme";
+import { useQuery } from "@apollo/client";
+import { css } from "@emotion/react";
 import { Sparkles } from "lucide-react";
 import ContactList from "./contact-list/contact-list";
 import ContactListTitle from "./contact-list/contact-list-title";
-import { Contact } from "@/types";
+import ContactListItem from "./contact-list/contact-list-item";
+
+const styles = {
+  loading: css({
+    textAlign: "center",
+    fontSize: theme.fontSize.xs,
+    lineHeight: theme.lineHeight.xs,
+    color: theme.colors.textSecondary,
+  }),
+};
 
 export default function FavoriteContacts() {
+  const {
+    state: { favoriteContacts },
+  } = useFavoriteContacts();
+
+  const { data, loading } = useQuery(GET_CONTACT_LIST, {
+    variables: {
+      where: {
+        id: {
+          _in: favoriteContacts,
+        },
+      },
+    },
+  });
+
+  if (loading) return;
+  if (!data?.contact) return;
+
   return (
-    <ContactList contacts={[]}>
+    <ContactList>
       <ContactListTitle>
         <Sparkles size="1.1rem" color={theme.colors.yellow} />
-        FAVORITE CONTACTS ({4})
+        FAVORITE CONTACTS ({data.contact.length})
       </ContactListTitle>
+
+      {data.contact.map((contact) => (
+        <ContactListItem key={contact.id} contact={contact} isFavorite />
+      ))}
     </ContactList>
   );
 }

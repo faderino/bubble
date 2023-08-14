@@ -25,11 +25,13 @@ const theme = {
   },
 
   border: {
+    sm: "0.125rem",
     md: "0.375rem",
     full: "9999px",
   },
 
   fontSize: {
+    xxs: "0.675rem",
     xs: "0.75rem",
     sm: "0.875rem",
   },

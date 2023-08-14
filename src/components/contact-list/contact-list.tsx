@@ -1,19 +1,7 @@
-import { Contact } from "@/types";
-import React from "react";
-import ContactListItem from "./contact-list-item";
+import styled from "@emotion/styled";
 
-interface ContactListProps {
-  contacts: Contact[];
-  children: React.ReactNode;
-}
+const ContactList = styled.div({
+  marginBottom: "1rem",
+});
 
-export default function ContactList({ contacts, children }: ContactListProps) {
-  return (
-    <div>
-      {children}
-      {contacts.map((contact) => (
-        <ContactListItem key={contact.id} contact={contact} />
-      ))}
-    </div>
-  );
-}
+export default ContactList;

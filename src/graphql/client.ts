@@ -3,15 +3,7 @@ import { offsetLimitPagination } from "@apollo/client/utilities";
 
 const client = new ApolloClient({
   uri: process.env.NEXT_PUBLIC_GRAPHQL_API,
-  cache: new InMemoryCache({
-    typePolicies: {
-      Query: {
-        fields: {
-          contact: offsetLimitPagination(),
-        },
-      },
-    },
-  }),
+  cache: new InMemoryCache(),
 });
 
 export default client;

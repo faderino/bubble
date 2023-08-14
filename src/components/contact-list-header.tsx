@@ -31,11 +31,12 @@ export default function ContactListHeader() {
     <div css={styles.headerContainer}>
       <div css={styles.header}>
         <div
-          css={[styles.headerColumn, { width: "70%", paddingLeft: "0.5rem" }]}
+          css={[styles.headerColumn, { width: "60%", paddingLeft: "0.5rem" }]}
         >
           Name
         </div>
         <div css={[styles.headerColumn, { width: "30%" }]}>Phone</div>
+        <div css={[styles.headerColumn, { width: "10%" }]}></div>
       </div>
     </div>
   );

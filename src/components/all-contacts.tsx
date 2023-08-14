@@ -7,6 +7,9 @@ import ContactList from "./contact-list/contact-list";
 import ContactListTitle from "./contact-list/contact-list-title";
 import { useState } from "react";
 import { Contact } from "@/types";
+import { useFavoriteContacts } from "@/context/favorite-contacts-context";
+import { User2 } from "lucide-react";
+import ContactListItem from "./contact-list/contact-list-item";
 
 const styles = {
   infiniteScrollText: css({
@@ -18,23 +21,38 @@ const styles = {
 };
 
 export default function AllContacts() {
+  const {
+    state: { favoriteContacts },
+  } = useFavoriteContacts();
+
   const { data, loading, fetchMore } = useQuery(GET_CONTACT_LIST, {
     variables: {
       limit: 10,
       offset: 0,
+      where: {
+        id: {
+          _nin: favoriteContacts,
+        },
+      },
     },
   });
   const [prevResult, setPrevResult] = useState<Contact[] | null>(null);
 
   function fetchNext() {
     if (data?.contact) {
-      fetchMore({ variables: { offset: data.contact.length } }).then((data) =>
-        setPrevResult(data.data.contact)
-      );
+      fetchMore({
+        variables: { offset: data.contact.length },
+        updateQuery: (prev, { fetchMoreResult }) => {
+          if (!fetchMoreResult) return prev;
+          return Object.assign({}, prev, {
+            contact: [...prev.contact, ...fetchMoreResult.contact],
+          });
+        },
+      }).then((data) => setPrevResult(data.data.contact));
     }
   }
 
-  if (loading) return <p css={styles.infiniteScrollText}>Loading...</p>;
+  if (loading) return;
   if (!data?.contact) return;
 
   return (
@@ -45,8 +63,15 @@ export default function AllContacts() {
       loader={<p css={styles.infiniteScrollText}>Loading...</p>}
       endMessage={<p css={styles.infiniteScrollText}>No more data to load.</p>}
     >
-      <ContactList contacts={data.contact}>
-        <ContactListTitle>CONTACTS</ContactListTitle>
+      <ContactList>
+        <ContactListTitle>
+          <User2 size="1.1rem" color={theme.colors.indigo} />
+          CONTACTS
+        </ContactListTitle>
+
+        {data.contact.map((contact) => (
+          <ContactListItem key={contact.id} contact={contact} />
+        ))}
       </ContactList>
     </InfiniteScroll>
   );

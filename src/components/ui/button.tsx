@@ -1,6 +1,7 @@
 import theme from "@/styles/theme";
 import { SerializedStyles, css } from "@emotion/react";
 import styled from "@emotion/styled";
+import React from "react";
 
 const styles = {
   default: css({
@@ -78,4 +79,22 @@ const CircleButton = styled(Button)({
   aspectRatio: 1,
 });
 
-export { Button, CircleButton };
+function ActionButton(props: ButtonProps) {
+  return (
+    <Button
+      {...props}
+      size="icon"
+      variant="ghost"
+      css={{
+        ":hover": {
+          background: "none",
+          "& > *": {
+            opacity: 0.8,
+          },
+        },
+      }}
+    />
+  );
+}
+
+export { Button, CircleButton, ActionButton };
