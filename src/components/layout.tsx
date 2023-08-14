@@ -1,8 +1,7 @@
+import styles from "@/styles/shared.styles";
+import { Inter } from "next/font/google";
 import React from "react";
 import Header from "./header/header";
-import { Inter } from "next/font/google";
-import { css } from "@emotion/react";
-import styles from "@/styles/shared.styles";
 
 const inter = Inter({ subsets: ["latin"] });
 

@@ -6,22 +6,20 @@ const styles = {
     position: "sticky",
     top: 0,
     zIndex: 1,
-    display: "block",
+    display: "flex",
   }),
 
   header: css({
-    display: "table",
     marginBottom: "0.5rem",
     borderBottom: `1px solid ${theme.colors.border}`,
     width: "100%",
     height: "3.25rem",
-    tableLayout: "fixed",
+    display: "flex",
+    alignItems: "center",
   }),
 
   headerColumn: css({
-    display: "table-cell",
     color: theme.colors.textSecondary,
-    verticalAlign: "middle",
     fontWeight: theme.fontWeight.md,
     fontSize: theme.fontSize.sm,
     lineHeight: theme.lineHeight.sm,
@@ -32,7 +30,12 @@ export default function ContactListHeader() {
   return (
     <div css={styles.headerContainer}>
       <div css={styles.header}>
-        <div css={styles.headerColumn}>Name</div>
+        <div
+          css={[styles.headerColumn, { width: "70%", paddingLeft: "0.5rem" }]}
+        >
+          Name
+        </div>
+        <div css={[styles.headerColumn, { width: "30%" }]}>Phone</div>
       </div>
     </div>
   );

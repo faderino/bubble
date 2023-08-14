@@ -2,6 +2,7 @@ import ContactListHeader from "@/components/contact-list-header";
 import FavoriteContacts from "@/components/favorite-contacts";
 import Head from "next/head";
 import styles from "../styles/home.styles";
+import AllContacts from "@/components/all-contacts";
 
 export default function Home() {
   return (
@@ -14,8 +15,8 @@ export default function Home() {
       </Head>
       <main css={styles.main}>
         <ContactListHeader />
-
-        <FavoriteContacts />
+        {/* <FavoriteContacts /> */}
+        <AllContacts />
       </main>
     </>
   );
