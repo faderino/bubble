@@ -1,5 +1,5 @@
 import sharedStyles from "@/styles/shared.styles";
-import { mediaQuery } from "@/styles/theme";
+import theme, { mediaQuery } from "@/styles/theme";
 import { css } from "@emotion/react";
 
 const styles = {
@@ -11,6 +11,7 @@ const styles = {
     height: "fit-content",
     zIndex: 10,
     padding: "0.75rem",
+    background: theme.colors.background,
   }),
 
   headerContent: css({

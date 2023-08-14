@@ -2,11 +2,7 @@ import { css } from "@emotion/react";
 
 const styles = {
   main: css({
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    gap: "1.25rem",
-    padding: "6rem",
+    padding: "6rem 1rem 1rem 1rem",
     minHeight: "100vh",
   }),
 };
