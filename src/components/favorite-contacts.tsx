@@ -2,20 +2,10 @@ import { useFavoriteContacts } from "@/context/favorite-contacts-context";
 import { GET_CONTACT_LIST } from "@/graphql/queries";
 import theme from "@/styles/theme";
 import { useQuery } from "@apollo/client";
-import { css } from "@emotion/react";
 import { Sparkles } from "lucide-react";
 import ContactList from "./contact-list/contact-list";
-import ContactListTitle from "./contact-list/contact-list-title";
 import ContactListItem from "./contact-list/contact-list-item";
-
-const styles = {
-  loading: css({
-    textAlign: "center",
-    fontSize: theme.fontSize.xs,
-    lineHeight: theme.lineHeight.xs,
-    color: theme.colors.textSecondary,
-  }),
-};
+import ContactListTitle from "./contact-list/contact-list-title";
 
 export default function FavoriteContacts() {
   const {
