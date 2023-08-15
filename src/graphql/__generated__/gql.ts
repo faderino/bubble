@@ -13,6 +13,7 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
  * Therefore it is highly recommended to use the babel or swc plugin for production.
  */
 const documents = {
+    "\n  mutation MyMutation($id: Int!) {\n    delete_contact_by_pk(id: $id) {\n      first_name\n      last_name\n      id\n    }\n  }\n": types.MyMutationDocument,
     "\n  query GetContactList(\n    $distinct_on: [contact_select_column!]\n    $limit: Int\n    $offset: Int\n    $order_by: [contact_order_by!]\n    $where: contact_bool_exp\n  ) {\n    contact(\n      distinct_on: $distinct_on\n      limit: $limit\n      offset: $offset\n      order_by: $order_by\n      where: $where\n    ) {\n      created_at\n      first_name\n      id\n      last_name\n      phones {\n        number\n      }\n    }\n  }\n": types.GetContactListDocument,
 };
 
@@ -30,6 +31,10 @@ const documents = {
  */
 export function gql(source: string): unknown;
 
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  mutation MyMutation($id: Int!) {\n    delete_contact_by_pk(id: $id) {\n      first_name\n      last_name\n      id\n    }\n  }\n"): (typeof documents)["\n  mutation MyMutation($id: Int!) {\n    delete_contact_by_pk(id: $id) {\n      first_name\n      last_name\n      id\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

@@ -86,6 +86,8 @@ function ActionButton(props: ButtonProps) {
       size="icon"
       variant="ghost"
       css={{
+        width: "1.5rem",
+        height: "1.5rem",
         ":hover": {
           background: "none",
           "& > *": {

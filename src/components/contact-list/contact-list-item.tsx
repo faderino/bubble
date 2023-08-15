@@ -1,14 +1,18 @@
-import { Contact } from "@/types";
-import styles from "./contact-list-item.styles";
-import Avatar from "../ui/avatar";
+import { useFavoriteContacts } from "@/context/favorite-contacts-context";
 import {
   addToFavoriteAction,
   removeFromFavoriteAction,
-  useFavoriteContacts,
-} from "@/context/favorite-contacts-context";
-import { Star } from "lucide-react";
-import { ActionButton, Button } from "../ui/button";
+} from "@/reducer/favorite-contacts-reducer";
 import theme from "@/styles/theme";
+import { Contact } from "@/types";
+import { Pencil, Star, Trash2 } from "lucide-react";
+import Avatar from "../ui/avatar";
+import { ActionButton } from "../ui/button";
+import styles from "./contact-list-item.styles";
+import { useMutation } from "@apollo/client";
+import { DELETE_CONTACT } from "@/graphql/mutation";
+import { GET_CONTACT_LIST } from "@/graphql/queries";
+import { toast, useToaster } from "react-hot-toast";
 
 interface ContactListItemProps {
   contact: Contact;
@@ -21,6 +25,11 @@ export default function ContactListItem({
 }: ContactListItemProps) {
   const { dispatch } = useFavoriteContacts();
 
+  const [deleteContact] = useMutation(DELETE_CONTACT, {
+    variables: { id: contact.id },
+    refetchQueries: [GET_CONTACT_LIST],
+  });
+
   function toggleFavoriteContact() {
     dispatch(
       isFavorite
@@ -29,14 +38,26 @@ export default function ContactListItem({
     );
   }
 
+  async function handleDeleteContact() {
+    try {
+      const resp = await deleteContact();
+      if (isFavorite) dispatch(removeFromFavoriteAction(contact.id));
+      toast(`${contact.first_name + contact.last_name} deleted from contact.`);
+    } catch (error) {
+      toast.error("Something went wrong. Try again.");
+    }
+  }
+
+  const fullName = contact.first_name + " " + contact.last_name;
+
   return (
     <div css={styles.itemContainer}>
       <div css={styles.item}>
         <div css={styles.person}>
           <div css={styles.avatarContainer}>
-            <Avatar name={contact.first_name + " " + contact.last_name} />
+            <Avatar name={fullName} />
           </div>
-          <p>{contact.first_name}</p>
+          <p>{fullName}</p>
         </div>
 
         <div css={styles.phone}>{contact.phones[0].number}</div>
@@ -50,6 +71,14 @@ export default function ContactListItem({
               isFavorite ? theme.colors.indigo : theme.colors.textSecondary
             }
           />
+        </ActionButton>
+
+        <ActionButton>
+          <Pencil size="1.1rem" color={theme.colors.textSecondary} />
+        </ActionButton>
+
+        <ActionButton onClick={handleDeleteContact}>
+          <Trash2 size="1.1rem" color={theme.colors.textSecondary} />
         </ActionButton>
       </div>
     </div>

@@ -57,11 +57,10 @@ export default function AllContacts() {
 
   return (
     <InfiniteScroll
-      dataLength={data.contact.length}
+      dataLength={data?.contact.length ?? 0}
       next={fetchNext}
-      hasMore={prevResult === null || prevResult.length > 0}
-      loader={<p css={styles.infiniteScrollText}>Loading...</p>}
-      endMessage={<p css={styles.infiniteScrollText}>No more data to load.</p>}
+      hasMore={true}
+      loader=""
     >
       <ContactList>
         <ContactListTitle>
@@ -69,7 +68,7 @@ export default function AllContacts() {
           CONTACTS
         </ContactListTitle>
 
-        {data.contact.map((contact) => (
+        {data?.contact.map((contact) => (
           <ContactListItem key={contact.id} contact={contact} />
         ))}
       </ContactList>

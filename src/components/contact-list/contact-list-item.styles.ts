@@ -1,4 +1,4 @@
-import theme from "@/styles/theme";
+import theme, { mediaQuery } from "@/styles/theme";
 import { css } from "@emotion/react";
 
 const styles = {
@@ -57,7 +57,7 @@ const styles = {
 
   action: css({
     opacity: 0,
-    display: "flex",
+    display: "none",
     position: "absolute",
     width: "10%",
     zIndex: 1,
@@ -74,6 +74,10 @@ const styles = {
 
     "& > *": {
       cursor: "pointer",
+    },
+
+    [mediaQuery.lg]: {
+      display: "flex",
     },
   }),
 };

@@ -24,15 +24,16 @@ export default function FavoriteContacts() {
 
   if (loading) return;
   if (!data?.contact) return;
+  if (data.contact.length === 0) return;
 
   return (
     <ContactList>
       <ContactListTitle>
         <Sparkles size="1.1rem" color={theme.colors.yellow} />
-        FAVORITE CONTACTS ({data.contact.length})
+        FAVORITE CONTACTS ({data?.contact.length})
       </ContactListTitle>
 
-      {data.contact.map((contact) => (
+      {data?.contact.map((contact) => (
         <ContactListItem key={contact.id} contact={contact} isFavorite />
       ))}
     </ContactList>
