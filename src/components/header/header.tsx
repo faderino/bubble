@@ -14,11 +14,9 @@ export default function Header({}: HeaderProps) {
   return (
     <div css={[styles.header, sharedStyles.container]}>
       <div css={styles.headerContent}>
-        <Button variant="ghost" size="icon">
-          <Menu />
-        </Button>
-
-        <Logo />
+        <div css={styles.headerLogo}>
+          <Logo />
+        </div>
 
         <div css={styles.searchContainer}>
           <div css={styles.searchBarToggle}>

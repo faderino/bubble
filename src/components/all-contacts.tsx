@@ -1,15 +1,13 @@
+import { useFavoriteContacts } from "@/context/favorite-contacts-context";
 import { GET_CONTACT_LIST } from "@/graphql/queries";
 import theme from "@/styles/theme";
 import { useQuery } from "@apollo/client";
 import { css } from "@emotion/react";
+import { User2 } from "lucide-react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import ContactList from "./contact-list/contact-list";
-import ContactListTitle from "./contact-list/contact-list-title";
-import { useState } from "react";
-import { Contact } from "@/types";
-import { useFavoriteContacts } from "@/context/favorite-contacts-context";
-import { User2 } from "lucide-react";
 import ContactListItem from "./contact-list/contact-list-item";
+import ContactListTitle from "./contact-list/contact-list-title";
 
 const styles = {
   infiniteScrollText: css({
@@ -36,7 +34,6 @@ export default function AllContacts() {
       },
     },
   });
-  const [prevResult, setPrevResult] = useState<Contact[] | null>(null);
 
   function fetchNext() {
     if (data?.contact) {
@@ -48,7 +45,7 @@ export default function AllContacts() {
             contact: [...prev.contact, ...fetchMoreResult.contact],
           });
         },
-      }).then((data) => setPrevResult(data.data.contact));
+      });
     }
   }
 

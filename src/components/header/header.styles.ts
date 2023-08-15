@@ -24,6 +24,15 @@ const styles = {
     },
   }),
 
+  headerLogo: css({
+    display: "flex",
+    alignItems: "center",
+
+    [mediaQuery.sm]: {
+      width: "12.5rem",
+    },
+  }),
+
   searchContainer: css({
     display: "flex",
     width: "100%",

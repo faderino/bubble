@@ -1,6 +1,7 @@
 import theme from "@/styles/theme";
 import { SerializedStyles, css } from "@emotion/react";
 import styled from "@emotion/styled";
+import { Plus } from "lucide-react";
 import React from "react";
 
 const styles = {
@@ -23,10 +24,17 @@ const styles = {
   }),
 };
 
-type ButtonVariant = "primary" | "ghost";
+type ButtonVariant = "primary" | "secondary" | "ghost";
 const buttonVariant: Record<ButtonVariant, SerializedStyles> = {
   primary: css({
     background: theme.colors.primary,
+    color: theme.colors.white,
+    ":hover": {
+      opacity: 0.9,
+    },
+  }),
+  secondary: css({
+    background: theme.colors.indigo,
     color: theme.colors.white,
     ":hover": {
       opacity: 0.9,
@@ -99,4 +107,29 @@ function ActionButton(props: ButtonProps) {
   );
 }
 
-export { Button, CircleButton, ActionButton };
+function FloatingButton(props: ButtonProps) {
+  return (
+    <div
+      css={{
+        position: "fixed",
+        bottom: "1.5rem",
+        right: "1.5rem",
+        padding: "0.5rem",
+      }}
+    >
+      <CircleButton
+        {...props}
+        variant="secondary"
+        css={{
+          width: "3.5rem",
+          height: "3.5rem",
+          boxShadow: theme.shadow.lg,
+        }}
+      >
+        <Plus size="2rem" />
+      </CircleButton>
+    </div>
+  );
+}
+
+export { Button, CircleButton, ActionButton, FloatingButton };
