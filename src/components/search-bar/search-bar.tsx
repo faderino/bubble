@@ -12,7 +12,7 @@ export default function SearchBar({ close }: SearchBarProps) {
   const router = useRouter();
   const inputRef = useAutoFocus();
   const searchParams = router.query as { q: string };
-  const [search, setSearch] = useState<string>(searchParams.q);
+  const [search, setSearch] = useState<string>(searchParams.q || "");
 
   useEffect(() => {
     setSearch(searchParams.q || "");
