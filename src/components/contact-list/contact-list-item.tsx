@@ -21,6 +21,14 @@ export default function ContactListItem({
 }: ContactListItemProps) {
   const { dispatch } = useFavoriteContacts();
 
+  function toggleFavoriteContact() {
+    dispatch(
+      isFavorite
+        ? removeFromFavoriteAction(contact.id)
+        : addToFavoriteAction(contact.id)
+    );
+  }
+
   return (
     <div css={styles.itemContainer}>
       <div css={styles.item}>
@@ -35,15 +43,7 @@ export default function ContactListItem({
       </div>
 
       <div css={styles.action}>
-        <ActionButton
-          onClick={() =>
-            dispatch(
-              isFavorite
-                ? removeFromFavoriteAction(contact.id)
-                : addToFavoriteAction(contact.id)
-            )
-          }
-        >
+        <ActionButton onClick={toggleFavoriteContact}>
           <Star
             size="1.1rem"
             color={
