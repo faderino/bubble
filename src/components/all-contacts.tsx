@@ -1,4 +1,5 @@
 import { useFavoriteContacts } from "@/context/favorite-contacts-context";
+import { Order_By } from "@/graphql/__generated__/graphql";
 import { GET_CONTACT_LIST } from "@/graphql/queries";
 import theme from "@/styles/theme";
 import { useQuery } from "@apollo/client";
@@ -24,6 +25,8 @@ export default function AllContacts() {
   } = useFavoriteContacts();
 
   const { data, loading, fetchMore } = useQuery(GET_CONTACT_LIST, {
+    fetchPolicy: "cache-and-network",
+    nextFetchPolicy: "cache-first",
     variables: {
       limit: 10,
       offset: 0,
@@ -31,6 +34,9 @@ export default function AllContacts() {
         id: {
           _nin: favoriteContacts,
         },
+      },
+      order_by: {
+        created_at: Order_By.Desc,
       },
     },
   });

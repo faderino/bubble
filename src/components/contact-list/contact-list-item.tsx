@@ -1,6 +1,11 @@
 import { useFavoriteContacts } from "@/context/favorite-contacts-context";
+import { defaultErrorMessage } from "@/error";
 import { DELETE_CONTACT } from "@/graphql/mutation";
-import { GET_CONTACT_LIST } from "@/graphql/queries";
+import {
+  GET_CONTACT_LIST,
+  GET_FAVORITE_CONTACT_LIST,
+  SEARCH_CONTACTS,
+} from "@/graphql/queries";
 import {
   addToFavoriteAction,
   removeFromFavoriteAction,
@@ -27,7 +32,11 @@ export default function ContactListItem({
 
   const [deleteContact] = useMutation(DELETE_CONTACT, {
     variables: { id: contact.id },
-    refetchQueries: [GET_CONTACT_LIST],
+    refetchQueries: [
+      GET_CONTACT_LIST,
+      GET_FAVORITE_CONTACT_LIST,
+      SEARCH_CONTACTS,
+    ],
   });
 
   function toggleFavoriteContact() {
@@ -57,7 +66,7 @@ export default function ContactListItem({
         } deleted from contact.`
       );
     } catch (error) {
-      toast.error("Something went wrong. Try again.");
+      toast.error(defaultErrorMessage);
     }
   }
 

@@ -1,10 +1,9 @@
-import AllContacts from "@/components/all-contacts";
 import ContactListHeader from "@/components/contact-list-header";
 import ContactList from "@/components/contact-list/contact-list";
 import ContactListItem from "@/components/contact-list/contact-list-item";
 import ContactListTitle from "@/components/contact-list/contact-list-title";
 import { useFavoriteContacts } from "@/context/favorite-contacts-context";
-import { GET_CONTACT_LIST } from "@/graphql/queries";
+import { SEARCH_CONTACTS } from "@/graphql/queries";
 import theme from "@/styles/theme";
 import { useQuery } from "@apollo/client";
 import { css } from "@emotion/react";
@@ -26,7 +25,7 @@ export default function Search() {
   const {
     state: { favoriteContacts },
   } = useFavoriteContacts();
-  const { data, loading } = useQuery(GET_CONTACT_LIST, {
+  const { data, loading } = useQuery(SEARCH_CONTACTS, {
     variables: {
       where: {
         _or: [
