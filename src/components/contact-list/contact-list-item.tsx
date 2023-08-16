@@ -1,18 +1,18 @@
 import { useFavoriteContacts } from "@/context/favorite-contacts-context";
+import { DELETE_CONTACT } from "@/graphql/mutation";
+import { GET_CONTACT_LIST } from "@/graphql/queries";
 import {
   addToFavoriteAction,
   removeFromFavoriteAction,
 } from "@/reducer/favorite-contacts-reducer";
 import theme from "@/styles/theme";
 import { Contact } from "@/types";
+import { useMutation } from "@apollo/client";
 import { Pencil, Star, Trash2 } from "lucide-react";
+import { toast } from "react-hot-toast";
 import Avatar from "../ui/avatar";
 import { ActionButton } from "../ui/button";
 import styles from "./contact-list-item.styles";
-import { useMutation } from "@apollo/client";
-import { DELETE_CONTACT } from "@/graphql/mutation";
-import { GET_CONTACT_LIST } from "@/graphql/queries";
-import { toast, useToaster } from "react-hot-toast";
 
 interface ContactListItemProps {
   contact: Contact;
@@ -31,18 +31,31 @@ export default function ContactListItem({
   });
 
   function toggleFavoriteContact() {
-    dispatch(
-      isFavorite
-        ? removeFromFavoriteAction(contact.id)
-        : addToFavoriteAction(contact.id)
-    );
+    if (isFavorite) {
+      dispatch(removeFromFavoriteAction(contact.id));
+      toast(
+        `${contact.first_name + contact.last_name} removed from favorites.`
+      );
+      return;
+    }
+
+    dispatch(addToFavoriteAction(contact.id));
+    toast(`${contact.first_name + contact.last_name} added to favorites.`);
   }
 
   async function handleDeleteContact() {
     try {
       const resp = await deleteContact();
+
+      const deletedContact = resp.data?.delete_contact_by_pk;
+      if (!deletedContact) return;
+
       if (isFavorite) dispatch(removeFromFavoriteAction(contact.id));
-      toast(`${contact.first_name + contact.last_name} deleted from contact.`);
+      toast(
+        `${
+          deletedContact.first_name + deletedContact.last_name
+        } deleted from contact.`
+      );
     } catch (error) {
       toast.error("Something went wrong. Try again.");
     }
@@ -60,7 +73,7 @@ export default function ContactListItem({
           <p>{fullName}</p>
         </div>
 
-        <div css={styles.phone}>{contact.phones[0].number}</div>
+        <div css={styles.phone}>{contact.phones[0]?.number}</div>
       </div>
 
       <div css={styles.action}>

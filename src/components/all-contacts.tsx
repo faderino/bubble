@@ -65,7 +65,7 @@ export default function AllContacts() {
           CONTACTS
         </ContactListTitle>
 
-        {data?.contact.map((contact) => (
+        {data.contact.map((contact) => (
           <ContactListItem key={contact.id} contact={contact} />
         ))}
       </ContactList>

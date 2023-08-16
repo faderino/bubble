@@ -33,7 +33,7 @@ export default function FavoriteContacts() {
         FAVORITE CONTACTS ({data?.contact.length})
       </ContactListTitle>
 
-      {data?.contact.map((contact) => (
+      {data.contact.map((contact) => (
         <ContactListItem key={contact.id} contact={contact} isFavorite />
       ))}
     </ContactList>
