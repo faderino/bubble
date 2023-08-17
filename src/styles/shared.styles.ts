@@ -7,6 +7,12 @@ const sharedStyles = {
     margin: "0 auto",
   }),
 
+  main: css({
+    padding: "6rem 1rem 1rem 1rem",
+    minHeight: "100vh",
+    position: "relative",
+  }),
+
   loadingText: css({
     textAlign: "center",
     fontSize: theme.fontSize.sm,

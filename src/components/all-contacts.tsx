@@ -1,24 +1,14 @@
 import { useFavoriteContacts } from "@/context/favorite-contacts-context";
 import { Order_By } from "@/graphql/__generated__/graphql";
 import { GET_CONTACT_LIST } from "@/graphql/queries";
+import sharedStyles from "@/styles/shared.styles";
 import theme from "@/styles/theme";
 import { useQuery } from "@apollo/client";
-import { css } from "@emotion/react";
 import { User2 } from "lucide-react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import ContactList from "./contact-list/contact-list";
 import ContactListItem from "./contact-list/contact-list-item";
 import ContactListTitle from "./contact-list/contact-list-title";
-import sharedStyles from "@/styles/shared.styles";
-
-const styles = {
-  infiniteScrollText: css({
-    textAlign: "center",
-    fontSize: theme.fontSize.xs,
-    lineHeight: theme.lineHeight.xs,
-    color: theme.colors.textSecondary,
-  }),
-};
 
 export default function AllContacts() {
   const {

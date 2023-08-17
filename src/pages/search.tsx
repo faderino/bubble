@@ -50,7 +50,7 @@ export default function Search() {
   return (
     <>
       <Head>
-        <title>Bubble | Search for {}</title>
+        <title>Bubble | Search for {searchParams.q}</title>
         <meta name="description" content="Bubble: Manage Contacts" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />

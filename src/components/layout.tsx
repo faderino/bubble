@@ -1,12 +1,11 @@
 import sharedStyles from "@/styles/shared.styles";
-import theme, { mediaQuery } from "@/styles/theme";
 import { Plus, User2 } from "lucide-react";
 import { Inter } from "next/font/google";
 import { useRouter } from "next/router";
 import React from "react";
 import Header from "./header/header";
-import { Button } from "./ui/button";
 import styles from "./layout.styles";
+import { Button } from "./ui/button";
 import MenuItem from "./ui/menu-item";
 
 const inter = Inter({ subsets: ["latin"] });

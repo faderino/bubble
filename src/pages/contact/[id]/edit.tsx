@@ -118,7 +118,7 @@ export default function AddContact() {
   return (
     <>
       <Head>
-        <title>Bubble | New Contact</title>
+        <title>Bubble | Edit Contact</title>
         <meta name="description" content="Bubble: Manage Contacts" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />

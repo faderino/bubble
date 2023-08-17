@@ -76,7 +76,10 @@ export default function ContactListItem({
 
   return (
     <div css={styles.itemContainer}>
-      <div css={styles.item}>
+      <div
+        css={styles.item}
+        onClick={() => router.push(`/contact/${contact.id}`)}
+      >
         <div css={styles.person}>
           <div css={styles.avatarContainer}>
             <Avatar name={fullName} />
