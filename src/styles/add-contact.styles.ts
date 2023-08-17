@@ -3,7 +3,7 @@ import { css } from "@emotion/react";
 const styles = {
   main: css({
     padding: "6rem 1rem 1rem 1rem",
-    minHeight: "105vh",
+    minHeight: "100vh",
     position: "relative",
   }),
 };

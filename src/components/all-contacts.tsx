@@ -1,22 +1,14 @@
-import { useFavoriteContacts } from "@/context/favorite-contacts-context";
+import { Order_By } from "@/graphql/__generated__/graphql";
 import { GET_CONTACT_LIST } from "@/graphql/queries";
+import { useFavoriteContacts } from "@/hooks/use-favorite-contacts";
+import sharedStyles from "@/styles/shared.styles";
 import theme from "@/styles/theme";
 import { useQuery } from "@apollo/client";
-import { css } from "@emotion/react";
 import { User2 } from "lucide-react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import ContactList from "./contact-list/contact-list";
 import ContactListItem from "./contact-list/contact-list-item";
 import ContactListTitle from "./contact-list/contact-list-title";
-
-const styles = {
-  infiniteScrollText: css({
-    textAlign: "center",
-    fontSize: theme.fontSize.xs,
-    lineHeight: theme.lineHeight.xs,
-    color: theme.colors.textSecondary,
-  }),
-};
 
 export default function AllContacts() {
   const {
@@ -24,6 +16,8 @@ export default function AllContacts() {
   } = useFavoriteContacts();
 
   const { data, loading, fetchMore } = useQuery(GET_CONTACT_LIST, {
+    fetchPolicy: "cache-and-network",
+    nextFetchPolicy: "cache-first",
     variables: {
       limit: 10,
       offset: 0,
@@ -31,6 +25,9 @@ export default function AllContacts() {
         id: {
           _nin: favoriteContacts,
         },
+      },
+      order_by: {
+        created_at: Order_By.Desc,
       },
     },
   });
@@ -49,7 +46,8 @@ export default function AllContacts() {
     }
   }
 
-  if (loading) return;
+  if (loading)
+    return <div css={sharedStyles.loadingText}>Getting contacts...</div>;
   if (!data?.contact) return;
 
   return (
@@ -65,7 +63,7 @@ export default function AllContacts() {
           CONTACTS
         </ContactListTitle>
 
-        {data?.contact.map((contact) => (
+        {data.contact.map((contact) => (
           <ContactListItem key={contact.id} contact={contact} />
         ))}
       </ContactList>

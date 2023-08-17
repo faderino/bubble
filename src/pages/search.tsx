@@ -1,10 +1,9 @@
-import AllContacts from "@/components/all-contacts";
 import ContactListHeader from "@/components/contact-list-header";
 import ContactList from "@/components/contact-list/contact-list";
 import ContactListItem from "@/components/contact-list/contact-list-item";
 import ContactListTitle from "@/components/contact-list/contact-list-title";
-import { useFavoriteContacts } from "@/context/favorite-contacts-context";
-import { GET_CONTACT_LIST } from "@/graphql/queries";
+import { SEARCH_CONTACTS } from "@/graphql/queries";
+import { useFavoriteContacts } from "@/hooks/use-favorite-contacts";
 import theme from "@/styles/theme";
 import { useQuery } from "@apollo/client";
 import { css } from "@emotion/react";
@@ -22,11 +21,12 @@ const styles = {
 export default function Search() {
   const router = useRouter();
   const searchParams = router.query as { q: string };
+  const splitBySpace = searchParams.q.split(" ");
 
   const {
     state: { favoriteContacts },
   } = useFavoriteContacts();
-  const { data, loading } = useQuery(GET_CONTACT_LIST, {
+  const { data, loading } = useQuery(SEARCH_CONTACTS, {
     variables: {
       where: {
         _or: [
@@ -40,6 +40,16 @@ export default function Search() {
               _ilike: `%${searchParams.q}%`,
             },
           },
+          ...splitBySpace.map((q) => ({
+            first_name: {
+              _ilike: `%${q}%`,
+            },
+          })),
+          ...splitBySpace.map((q) => ({
+            last_name: {
+              _ilike: `%${q}%`,
+            },
+          })),
         ],
       },
     },
@@ -51,7 +61,7 @@ export default function Search() {
   return (
     <>
       <Head>
-        <title>Bubble | Search for {}</title>
+        <title>Bubble | Search for {searchParams.q}</title>
         <meta name="description" content="Bubble: Manage Contacts" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />

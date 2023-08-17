@@ -17,6 +17,7 @@ const theme = {
     primary: "#020617",
     accent: "#efefef",
     background: "#ffffff",
+    error: "#ef4444",
 
     textPrimary: "#202124",
     textSecondary: "#5f6368",

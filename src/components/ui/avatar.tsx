@@ -20,7 +20,7 @@ export default function Avatar({ name, size = 40 }: AvatarProps) {
   return (
     <div css={style}>
       <Image
-        src={`https://ui-avatars.com/api/?name=${name}&font-size=0.4&background=random`}
+        src={`${process.env.NEXT_PUBLIC_AVATAR}?name=${name}&size=${size}&font-size=0.4&background=random`}
         width={size}
         height={size}
         alt="avatar"

@@ -1,11 +1,11 @@
 import favoriteContactsReducer, {
   FavoriteContactsAction,
   FavoriteContactsState,
-  getFavoriteContactsAction,
+  getFavoriteContactsAction
 } from "@/reducer/favorite-contacts-reducer";
-import React, { createContext, useContext, useEffect, useReducer } from "react";
+import React, { createContext, useEffect, useReducer } from "react";
 
-const FavoriteContactsContext = createContext<{
+export const FavoriteContactsContext = createContext<{
   state: FavoriteContactsState;
   dispatch: React.Dispatch<FavoriteContactsAction>;
 } | null>(null);
@@ -31,15 +31,4 @@ export function FavoriteContactsProvider({
       {children}
     </FavoriteContactsContext.Provider>
   );
-}
-
-export function useFavoriteContacts() {
-  const context = useContext(FavoriteContactsContext);
-  if (!context) {
-    throw new Error(
-      "useFavoriteContacts must be used within a FavoriteContactsProvider"
-    );
-  }
-
-  return context;
 }
