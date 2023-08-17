@@ -1,6 +1,6 @@
-import { useFavoriteContacts } from "@/context/favorite-contacts-context";
 import { Order_By } from "@/graphql/__generated__/graphql";
 import { GET_CONTACT_LIST } from "@/graphql/queries";
+import { useFavoriteContacts } from "@/hooks/use-favorite-contacts";
 import sharedStyles from "@/styles/shared.styles";
 import theme from "@/styles/theme";
 import { useQuery } from "@apollo/client";

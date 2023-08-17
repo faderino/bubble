@@ -1,4 +1,3 @@
-import { useFavoriteContacts } from "@/context/favorite-contacts-context";
 import { Order_By } from "@/graphql/__generated__/graphql";
 import { GET_FAVORITE_CONTACT_LIST } from "@/graphql/queries";
 import theme from "@/styles/theme";
@@ -7,7 +6,7 @@ import { Sparkles } from "lucide-react";
 import ContactList from "./contact-list/contact-list";
 import ContactListItem from "./contact-list/contact-list-item";
 import ContactListTitle from "./contact-list/contact-list-title";
-import sharedStyles from "@/styles/shared.styles";
+import { useFavoriteContacts } from "@/hooks/use-favorite-contacts";
 
 export default function FavoriteContacts() {
   const {
