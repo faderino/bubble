@@ -50,6 +50,7 @@ export default function ContactListItem({
             color={
               isFavorite ? theme.colors.indigo : theme.colors.textSecondary
             }
+            fill={isFavorite ? theme.colors.indigo : "none"}
           />
         </ActionButton>
 

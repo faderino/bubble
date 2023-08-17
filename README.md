@@ -1,38 +1,51 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+<h1 align="center">
+    <a href="https://bubble-one.vercel.app">Bubble</a>
+</h1>
 
-## Getting Started
+<p align="center">
+  <a href="#introduction"><strong>Introduction</strong></a> ·
+  <a href="#tech-stack"><strong>Tech Stack</strong></a> ·
+  <a href="#features"><strong>Features</strong></a> ·
+</p>
+<br/>
 
-First, run the development server:
+<p align="center">
+    <img src="screenshot/bubble-banner.png" alt="bubble-banner" />
+</p>
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-```
+## Introduction
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Bubble is a contact list management app. Built with [Nextjs](https://nextjs.org/), [Typescript](https://www.typescriptlang.org/), and [Emotion css](https://emotion.sh/docs/introduction).
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+## Tech Stack
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+- [Nextjs](https://nextjs.org/) – framework
+- [Typescript](https://www.typescriptlang.org/) – language
+- [Emotion css](https://emotion.sh/docs/introduction) – styling
+- [Apollo Client](https://www.apollographql.com/docs/react/) – state management, GraphQL
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+## Features
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+Here are some of the features:
 
-## Learn More
+- [Contact List & Search](#contact-list-&-search)
+- [Favorites](#favorites)
+- [Manage Contact](#manage-contact)
 
-To learn more about Next.js, take a look at the following resources:
+### Contact List & Search
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+See your contacts info.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+![bubble-contact-list](/screenshot/bubble-contact-list.png)
 
-## Deploy on Vercel
+### Favorites
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Choose your favorite contacts.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+![bubble-contact](/screenshot/bubble-contact.png)
+
+### Manage Contact
+
+Add & Edit contact information.
+
+![bubble-form-contact](/screenshot/bubble-form-contact.png)
