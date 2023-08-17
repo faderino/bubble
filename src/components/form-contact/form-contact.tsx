@@ -4,10 +4,10 @@ import theme from "@/styles/theme";
 import { useLazyQuery } from "@apollo/client";
 import { Phone, Plus, User2, X } from "lucide-react";
 import {
-    ErrorOption,
-    SubmitHandler,
-    useFieldArray,
-    useForm,
+  ErrorOption,
+  SubmitHandler,
+  useFieldArray,
+  useForm,
 } from "react-hook-form";
 import { toast } from "react-hot-toast";
 import { Button } from "../ui/button";
@@ -47,6 +47,29 @@ export default function FormContact({ handleSave }: FormContactProps) {
   const watchLastPhone = watch(`phones.${fields.length - 1}.number`);
 
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
+    const filterEmptyPhones = data.phones.filter(Boolean);
+    const freq: Record<string, number> = filterEmptyPhones.reduce(
+      (prev, curr, index, arr) => {
+        if (!prev[curr.number]) {
+          prev[curr.number] = 0;
+        }
+        prev[curr.number]++;
+        return prev;
+      },
+      {} as Record<string, number>
+    );
+    let hasDuplicatePhone = false;
+    filterEmptyPhones.forEach((phone, index) => {
+      if (freq[phone.number] > 1) {
+        hasDuplicatePhone = true;
+        setError(`phones.${index}.number`, {
+          type: "manual",
+          message: "Duplicate phone number",
+        });
+      }
+    });
+    if (hasDuplicatePhone) return;
+
     try {
       const resp = await checkUniqueName({
         variables: {
@@ -72,7 +95,7 @@ export default function FormContact({ handleSave }: FormContactProps) {
       return;
     }
 
-    handleSave(data);
+    handleSave({ ...data, phones: filterEmptyPhones });
   };
 
   function PhoneInputButton(index: number) {
@@ -158,12 +181,12 @@ export default function FormContact({ handleSave }: FormContactProps) {
                     value: /^\d+$/,
                     message: "Invalid phone number",
                   },
-                  validate: (field) => {
-                    if (fields.some((f) => f.number === field)) {
-                      return "Duplicate phone number";
-                    }
-                    return true;
-                  },
+                  // validate: (field) => {
+                  //   if (fields.some((f) => f.number === field)) {
+                  //     return "Duplicate phone number";
+                  //   }
+                  //   return true;
+                  // },
                 })}
               />
             </FormItem>

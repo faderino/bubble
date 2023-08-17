@@ -3,6 +3,7 @@ import { css } from "@emotion/react";
 import { X } from "lucide-react";
 import { useRouter } from "next/router";
 import React from "react";
+import { Button } from "../ui/button";
 
 const styles = {
   container: css({
@@ -27,11 +28,10 @@ export default function FormContactHeader({
   const router = useRouter();
   return (
     <div css={styles.container}>
-      <div css={{ display: "flex", alignItems: "center", gap: "1rem" }}>
-        <X
-          color={theme.colors.textSecondary}
-          onClick={() => router.push("/")}
-        />
+      <div css={{ display: "flex", alignItems: "center", gap: "0.25rem" }}>
+        <Button onClick={() => router.push("/")} size="icon" variant="ghost">
+          <X color={theme.colors.textSecondary} />
+        </Button>
         <div css={{ fontWeight: theme.fontWeight.md }}>{title}</div>
       </div>
 
