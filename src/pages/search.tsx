@@ -21,7 +21,7 @@ const styles = {
 export default function Search() {
   const router = useRouter();
   const searchParams = router.query as { q: string };
-  const splitBySpace = searchParams.q.split(" ");
+  const splitBySpace = searchParams.q?.split(" ") ?? [];
 
   const {
     state: { favoriteContacts },

@@ -47,7 +47,7 @@ export default function FormContact({
   const watchLastPhone = watch(`phones.${fields.length - 1}.number`);
 
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
-    const filterEmptyPhones = data.phones.filter(Boolean);
+    const filterEmptyPhones = data.phones.filter((phone) => phone.number);
 
     if (checkDuplicatePhones(filterEmptyPhones, setError)) return;
     const nameIsUnique = await checkUniqueName(data);
