@@ -4,6 +4,7 @@ import ContactListItem from "@/components/contact-list/contact-list-item";
 import ContactListTitle from "@/components/contact-list/contact-list-title";
 import { SEARCH_CONTACTS } from "@/graphql/queries";
 import { useFavoriteContacts } from "@/hooks/use-favorite-contacts";
+import sharedStyles from "@/styles/shared.styles";
 import theme from "@/styles/theme";
 import { useQuery } from "@apollo/client";
 import { css } from "@emotion/react";
@@ -70,18 +71,26 @@ export default function Search() {
         <ContactListHeader />
 
         <ContactList>
-          <ContactListTitle>
-            <User2 size="1.1rem" color={theme.colors.indigo} />
-            CONTACTS
-          </ContactListTitle>
+          {data.contact.length === 0 ? (
+            <div css={sharedStyles.emptyResult}>
+              Contact not found. Try other keyword.
+            </div>
+          ) : (
+            <>
+              <ContactListTitle>
+                <User2 size="1.1rem" color={theme.colors.indigo} />
+                CONTACTS
+              </ContactListTitle>
 
-          {data.contact.map((contact) => (
-            <ContactListItem
-              key={contact.id}
-              contact={contact}
-              isFavorite={favoriteContacts.includes(contact.id)}
-            />
-          ))}
+              {data.contact.map((contact) => (
+                <ContactListItem
+                  key={contact.id}
+                  contact={contact}
+                  isFavorite={favoriteContacts.includes(contact.id)}
+                />
+              ))}
+            </>
+          )}
         </ContactList>
       </main>
     </>

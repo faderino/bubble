@@ -28,6 +28,20 @@ interface FormContactProps {
   type?: "form-add" | "form-edit" | "display";
 }
 
+function getInitialPhone(
+  type: FormContactProps["type"],
+  contact: FormContactProps["contactDetail"]
+) {
+  if (!contact || type === "form-add") return [{ number: "" }];
+  if (type === "display") return contact.phones;
+  if (type === "form-edit") {
+    if (contact.phones.length) {
+      return contact.phones;
+    }
+    return [{ number: "" }];
+  }
+}
+
 export default function FormContact({
   handleSave,
   contactDetail,
@@ -38,7 +52,7 @@ export default function FormContact({
       defaultValues: {
         firstName: contactDetail?.first_name ?? "",
         lastName: contactDetail?.last_name ?? "",
-        phones: contactDetail?.phones ?? [{ number: "" }],
+        phones: getInitialPhone(type, contactDetail),
       },
     });
   const checkUniqueName = useCheckUniqueName(type, setError, contactDetail);

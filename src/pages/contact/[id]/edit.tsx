@@ -124,26 +124,32 @@ export default function AddContact() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main css={styles.main}>
-        <FormContactHeader
-          title="Edit contact"
-          action={
-            <Button
-              variant="secondary"
-              type="submit"
-              form={FORM_CONTACT_ID}
-              disabled={loading}
-            >
-              Save
-            </Button>
-          }
-        />
-
         {getContactLoading ? (
           <div css={sharedStyles.loadingText}>Getting contact info...</div>
+        ) : !contact?.contact_by_pk ? (
+          <div css={sharedStyles.emptyResult}>Contact does not exist.</div>
         ) : (
           <>
+            <FormContactHeader
+              title="Edit contact"
+              action={
+                <Button
+                  variant="secondary"
+                  type="submit"
+                  form={FORM_CONTACT_ID}
+                  disabled={loading}
+                >
+                  Save
+                </Button>
+              }
+            />
+
             <div
-              css={{ width: 128, height: 128, margin: "2rem auto 1rem auto" }}
+              css={{
+                width: 128,
+                height: 128,
+                margin: "2rem auto 1rem auto",
+              }}
             >
               <Avatar
                 name={`${contact?.contact_by_pk?.first_name} ${contact?.contact_by_pk?.last_name}`}

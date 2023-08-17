@@ -2,9 +2,7 @@ import FormContact from "@/components/form-contact/form-contact";
 import FormContactHeader from "@/components/form-contact/form-contact-header";
 import Avatar from "@/components/ui/avatar";
 import { ActionButton } from "@/components/ui/button";
-import {
-  GET_CONTACT_DETAIL
-} from "@/graphql/queries";
+import { GET_CONTACT_DETAIL } from "@/graphql/queries";
 import { useDeleteContact } from "@/hooks/use-delete-contact";
 import { useFavoriteContacts } from "@/hooks/use-favorite-contacts";
 import sharedStyles from "@/styles/shared.styles";
@@ -40,8 +38,6 @@ export default function ContactDetail() {
     return <div css={sharedStyles.loadingText}>Getting contact info...</div>;
   }
 
-  if (!contact?.contact_by_pk) return;
-
   return (
     <>
       <Head>
@@ -57,48 +53,62 @@ export default function ContactDetail() {
       </Head>
 
       <main css={sharedStyles.main}>
-        <FormContactHeader
-          title=""
-          action={
-            <div css={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-              <ActionButton
-                onClick={() =>
-                  toggleFavoriteContact(isFavorite, contactId, fullName)
-                }
-              >
-                <Star
-                  size="1.1rem"
-                  color={
-                    isFavorite
-                      ? theme.colors.indigo
-                      : theme.colors.textSecondary
-                  }
-                />
-              </ActionButton>
+        {!contact?.contact_by_pk ? (
+          <div css={sharedStyles.emptyResult}>Contact does not exist.</div>
+        ) : (
+          <>
+            <FormContactHeader
+              title=""
+              action={
+                <div
+                  css={{ display: "flex", alignItems: "center", gap: "0.5rem" }}
+                >
+                  <ActionButton
+                    onClick={() =>
+                      toggleFavoriteContact(isFavorite, contactId, fullName)
+                    }
+                  >
+                    <Star
+                      size="1.1rem"
+                      color={
+                        isFavorite
+                          ? theme.colors.indigo
+                          : theme.colors.textSecondary
+                      }
+                    />
+                  </ActionButton>
 
-              <ActionButton
-                onClick={() => router.push(`/contact/${contactId}/edit`)}
-              >
-                <Pencil size="1.1rem" color={theme.colors.textSecondary} />
-              </ActionButton>
+                  <ActionButton
+                    onClick={() => router.push(`/contact/${contactId}/edit`)}
+                  >
+                    <Pencil size="1.1rem" color={theme.colors.textSecondary} />
+                  </ActionButton>
 
-              <ActionButton
-                onClick={() => handleDeleteContact(contactId, isFavorite)}
-              >
-                <Trash2 size="1.1rem" color={theme.colors.textSecondary} />
-              </ActionButton>
+                  <ActionButton
+                    onClick={() =>
+                      handleDeleteContact(contactId, isFavorite).then(() =>
+                        router.push("/")
+                      )
+                    }
+                  >
+                    <Trash2 size="1.1rem" color={theme.colors.textSecondary} />
+                  </ActionButton>
+                </div>
+              }
+            />
+
+            <div
+              css={{ width: 128, height: 128, margin: "2rem auto 1rem auto" }}
+            >
+              <Avatar name={fullName} size={128} />
             </div>
-          }
-        />
-
-        <div css={{ width: 128, height: 128, margin: "2rem auto 1rem auto" }}>
-          <Avatar name={fullName} size={128} />
-        </div>
-        <FormContact
-          type="display"
-          handleSave={() => {}}
-          contactDetail={contact?.contact_by_pk}
-        />
+            <FormContact
+              type="display"
+              handleSave={() => {}}
+              contactDetail={contact?.contact_by_pk}
+            />
+          </>
+        )}
       </main>
     </>
   );
