@@ -1,23 +1,17 @@
-import { defaultErrorMessage } from "@/error";
-import { CHECK_CONTACT_UNIQUE_NAME } from "@/graphql/queries";
+import { useCheckUniqueName } from "@/hooks/use-check-unique-name";
 import theme from "@/styles/theme";
-import { useLazyQuery } from "@apollo/client";
-import { Phone, Plus, User2, X } from "lucide-react";
-import {
-  ErrorOption,
-  SubmitHandler,
-  useFieldArray,
-  useForm,
-} from "react-hook-form";
-import { toast } from "react-hot-toast";
-import { Button } from "../ui/button";
+import { Contact } from "@/types";
+import { checkDuplicatePhones } from "@/utils/check-duplicate-phone";
+import { Phone, User2 } from "lucide-react";
+import { SubmitHandler, useFieldArray, useForm } from "react-hook-form";
 import { Form, FormItem, FormItemGroup } from "../ui/form/form";
 import { Input } from "../ui/input";
+import PhoneInputButton from "./phone-input-button";
 
 export const FORM_CONTACT_ID = "contact-form";
 const NO_SPECIAL_CHARACTERS_VALIDATION = {
   pattern: {
-    value: /^[A-Za-z0-9]+$/i,
+    value: /^[ A-Za-z0-9]+$/i,
     message: "Special characters not allowed",
   },
 };
@@ -30,101 +24,37 @@ export interface FormValues {
 
 interface FormContactProps {
   handleSave: (data: FormValues) => void;
+  contactDetail?: Contact | null;
+  type?: "form-add" | "form-edit" | "display";
 }
 
-export default function FormContact({ handleSave }: FormContactProps) {
+export default function FormContact({
+  handleSave,
+  contactDetail,
+  type = "form-add",
+}: FormContactProps) {
   const { register, handleSubmit, control, watch, formState, setError } =
     useForm<FormValues>({
       defaultValues: {
-        firstName: "",
-        lastName: "",
-        phones: [{ number: "" }],
+        firstName: contactDetail?.first_name ?? "",
+        lastName: contactDetail?.last_name ?? "",
+        phones: contactDetail?.phones ?? [{ number: "" }],
       },
     });
-  const [checkUniqueName] = useLazyQuery(CHECK_CONTACT_UNIQUE_NAME);
+  const checkUniqueName = useCheckUniqueName(type, setError, contactDetail);
 
   const { fields, append, remove } = useFieldArray({ name: "phones", control });
   const watchLastPhone = watch(`phones.${fields.length - 1}.number`);
 
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
     const filterEmptyPhones = data.phones.filter(Boolean);
-    const freq: Record<string, number> = filterEmptyPhones.reduce(
-      (prev, curr, index, arr) => {
-        if (!prev[curr.number]) {
-          prev[curr.number] = 0;
-        }
-        prev[curr.number]++;
-        return prev;
-      },
-      {} as Record<string, number>
-    );
-    let hasDuplicatePhone = false;
-    filterEmptyPhones.forEach((phone, index) => {
-      if (freq[phone.number] > 1) {
-        hasDuplicatePhone = true;
-        setError(`phones.${index}.number`, {
-          type: "manual",
-          message: "Duplicate phone number",
-        });
-      }
-    });
-    if (hasDuplicatePhone) return;
 
-    try {
-      const resp = await checkUniqueName({
-        variables: {
-          where: {
-            _and: [
-              { first_name: { _eq: data.firstName } },
-              { last_name: { _eq: data.lastName } },
-            ],
-          },
-        },
-      });
-      if (resp.data?.contact.length) {
-        const err: ErrorOption = {
-          type: "manual",
-          message: "Name already exist",
-        };
-        setError("firstName", err);
-        setError("lastName", err);
-        return;
-      }
-    } catch (error) {
-      toast.error(defaultErrorMessage);
-      return;
-    }
+    if (checkDuplicatePhones(filterEmptyPhones, setError)) return;
+    const nameIsUnique = await checkUniqueName(data);
+    if (!nameIsUnique) return;
 
     handleSave({ ...data, phones: filterEmptyPhones });
   };
-
-  function PhoneInputButton(index: number) {
-    if (index === fields.length - 1) {
-      if (!watchLastPhone) return null;
-
-      return (
-        <Button
-          onClick={() => append({ number: "" })}
-          type="button"
-          css={{ width: "1.5rem", height: "1.5rem", padding: 0 }}
-          variant="ghost"
-        >
-          <Plus color={theme.colors.indigo} size="1rem" />
-        </Button>
-      );
-    }
-
-    return (
-      <Button
-        onClick={() => remove(index)}
-        type="button"
-        css={{ width: "1.5rem", height: "1.5rem", padding: 0 }}
-        variant="ghost"
-      >
-        <X color={theme.colors.textSecondary} size="1rem" />
-      </Button>
-    );
-  }
 
   return (
     <Form
@@ -144,6 +74,7 @@ export default function FormContact({ handleSave }: FormContactProps) {
               required: "First name is required",
               ...NO_SPECIAL_CHARACTERS_VALIDATION,
             })}
+            displayOnly={type === "display"}
           />
         </FormItem>
         <FormItem error={formState.errors.lastName?.message}>
@@ -153,6 +84,7 @@ export default function FormContact({ handleSave }: FormContactProps) {
               required: "Last name is required",
               ...NO_SPECIAL_CHARACTERS_VALIDATION,
             })}
+            displayOnly={type === "display"}
           />
         </FormItem>
       </FormItemGroup>
@@ -167,10 +99,21 @@ export default function FormContact({ handleSave }: FormContactProps) {
                   <Phone color={theme.colors.textSecondary} />
                 ) : null
               }
-              append={PhoneInputButton(index)}
+              append={
+                <PhoneInputButton
+                  append={append}
+                  fields={fields}
+                  index={index}
+                  remove={remove}
+                  type={type}
+                  watchLastPhone={watchLastPhone}
+                  contactDetail={contactDetail}
+                />
+              }
               error={formState.errors.phones?.[index]?.number?.message}
             >
               <Input
+                displayOnly={type === "display"}
                 placeholder="Phone"
                 {...register(`phones.${index}.number`, {
                   required: {
@@ -181,12 +124,6 @@ export default function FormContact({ handleSave }: FormContactProps) {
                     value: /^\d+$/,
                     message: "Invalid phone number",
                   },
-                  // validate: (field) => {
-                  //   if (fields.some((f) => f.number === field)) {
-                  //     return "Duplicate phone number";
-                  //   }
-                  //   return true;
-                  // },
                 })}
               />
             </FormItem>

@@ -18,6 +18,7 @@ import { toast } from "react-hot-toast";
 import Avatar from "../ui/avatar";
 import { ActionButton } from "../ui/button";
 import styles from "./contact-list-item.styles";
+import { useRouter } from "next/router";
 
 interface ContactListItemProps {
   contact: Contact;
@@ -28,6 +29,7 @@ export default function ContactListItem({
   contact,
   isFavorite = false,
 }: ContactListItemProps) {
+  const router = useRouter();
   const { dispatch } = useFavoriteContacts();
 
   const [deleteContact] = useMutation(DELETE_CONTACT, {
@@ -95,7 +97,9 @@ export default function ContactListItem({
           />
         </ActionButton>
 
-        <ActionButton>
+        <ActionButton
+          onClick={() => router.push(`/contact/${contact.id}/edit`)}
+        >
           <Pencil size="1.1rem" color={theme.colors.textSecondary} />
         </ActionButton>
 

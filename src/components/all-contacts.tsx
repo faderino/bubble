@@ -9,6 +9,7 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import ContactList from "./contact-list/contact-list";
 import ContactListItem from "./contact-list/contact-list-item";
 import ContactListTitle from "./contact-list/contact-list-title";
+import sharedStyles from "@/styles/shared.styles";
 
 const styles = {
   infiniteScrollText: css({
@@ -55,7 +56,8 @@ export default function AllContacts() {
     }
   }
 
-  if (loading) return;
+  if (loading)
+    return <div css={sharedStyles.loadingText}>Getting contacts...</div>;
   if (!data?.contact) return;
 
   return (

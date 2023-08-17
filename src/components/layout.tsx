@@ -26,10 +26,10 @@ export default function Layout({ children }: LayoutProps) {
             <div css={styles.createContactButtonContainer}>
               <Button
                 variant="secondary"
-                css={{ gap: "0.5rem" }}
+                css={{ gap: "0.25rem" }}
                 onClick={() => router.push("/add-contact")}
               >
-                <Plus />
+                <Plus size="1.1rem" />
                 Create contact
               </Button>
             </div>

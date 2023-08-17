@@ -23,6 +23,7 @@ export default function App({ Component, pageProps }: AppProps) {
                   color: theme.colors.white,
                   fontSize: theme.fontSize.sm,
                   lineHeight: theme.lineHeight.sm,
+                  textAlign: "center",
                 },
               }}
             />

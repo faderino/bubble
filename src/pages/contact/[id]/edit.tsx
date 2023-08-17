@@ -3,11 +3,11 @@ import FormContact, {
   FormValues,
 } from "@/components/form-contact/form-contact";
 import FormContactHeader from "@/components/form-contact/form-contact-header";
+import Avatar from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { defaultErrorMessage, mapError } from "@/error";
-import { Phone_Pk_Columns_Input } from "@/graphql/__generated__/graphql";
 import {
-  ADD_CONTACT,
+  ADD_PHONE_NUMBER_TO_CONTACT,
   EDIT_CONTACT,
   EDIT_PHONE_NUMBER,
 } from "@/graphql/mutation";
@@ -17,25 +17,39 @@ import {
   GET_FAVORITE_CONTACT_LIST,
 } from "@/graphql/queries";
 import styles from "@/styles/add-contact.styles";
+import sharedStyles from "@/styles/shared.styles";
 import { ApolloError, useMutation, useQuery } from "@apollo/client";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { toast } from "react-hot-toast";
 
+const REFETCH_QUERIES = [
+  GET_CONTACT_LIST,
+  GET_FAVORITE_CONTACT_LIST,
+  GET_CONTACT_DETAIL,
+];
+
 export default function AddContact() {
   const router = useRouter();
   const contactId = Number(router.query.id as string);
 
-  const { data: contact } = useQuery(GET_CONTACT_DETAIL, {
-    variables: { id: contactId },
-  });
+  const { data: contact, loading: getContactLoading } = useQuery(
+    GET_CONTACT_DETAIL,
+    {
+      variables: { id: contactId },
+    }
+  );
 
   const [editContact, { loading }] = useMutation(EDIT_CONTACT, {
-    refetchQueries: [GET_CONTACT_LIST, GET_FAVORITE_CONTACT_LIST],
+    refetchQueries: REFETCH_QUERIES,
   });
 
   const [editPhoneNumber] = useMutation(EDIT_PHONE_NUMBER, {
-    refetchQueries: [GET_CONTACT_LIST, GET_FAVORITE_CONTACT_LIST],
+    refetchQueries: REFETCH_QUERIES,
+  });
+
+  const [addPhoneNumberToContact] = useMutation(ADD_PHONE_NUMBER_TO_CONTACT, {
+    refetchQueries: REFETCH_QUERIES,
   });
 
   async function handleSave(data: FormValues) {
@@ -52,16 +66,40 @@ export default function AddContact() {
         },
       });
 
-      const editPhones = [
-        editPhoneNumber({
-          variables: {
-            pk_columns: { contact_id: contactId, number: "123123" },
-            new_phone_number: "123456",
-          },
-        }),
-      ];
+      const phoneNumbersToUpdate = data.phones.slice(
+        0,
+        contact.contact_by_pk.phones.length
+      );
+      const editPhoneNumberMutations = phoneNumbersToUpdate.map(
+        (phone, index) =>
+          editPhoneNumber({
+            variables: {
+              new_phone_number: phone.number,
+              pk_columns: {
+                contact_id: contactId,
+                number: contact.contact_by_pk!.phones[index].number,
+              },
+            },
+          })
+      );
+      await Promise.all(editPhoneNumberMutations);
 
-      toast.success(`${data.firstName} ${data.lastName} added to contact.`);
+      if (data.phones.length > contact.contact_by_pk.phones.length) {
+        const newPhoneNumbers = data.phones.slice(
+          contact.contact_by_pk.phones.length
+        );
+        const newPhoneNumberMutations = newPhoneNumbers.map((phone) =>
+          addPhoneNumberToContact({
+            variables: {
+              contact_id: contactId,
+              phone_number: phone.number,
+            },
+          })
+        );
+        await Promise.all(newPhoneNumberMutations);
+      }
+
+      toast.success("Update contact success.");
       router.push("/");
     } catch (error) {
       if (error instanceof ApolloError) {
@@ -100,7 +138,25 @@ export default function AddContact() {
           }
         />
 
-        <FormContact handleSave={handleSave} />
+        {getContactLoading ? (
+          <div css={sharedStyles.loadingText}>Getting contact info...</div>
+        ) : (
+          <>
+            <div
+              css={{ width: 128, height: 128, margin: "2rem auto 1rem auto" }}
+            >
+              <Avatar
+                name={`${contact?.contact_by_pk?.first_name} ${contact?.contact_by_pk?.last_name}`}
+                size={128}
+              />
+            </div>
+            <FormContact
+              type="form-edit"
+              handleSave={handleSave}
+              contactDetail={contact?.contact_by_pk}
+            />
+          </>
+        )}
       </main>
       ;
     </>
